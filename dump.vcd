@@ -1,0 +1,605 @@
+$date
+	Sat Mar 29 00:07:24 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	100ps
+$end
+$scope module REG_tb $end
+$var wire 8 ! Q [7:0] $end
+$var parameter 64 " BLUE $end
+$var parameter 32 # CLOCK_PERIOD $end
+$var parameter 72 $ CYAN $end
+$var parameter 72 % RED $end
+$var parameter 40 & RESET $end
+$var parameter 32 ' RESET_PULSE $end
+$var parameter 64 ( YELLOW $end
+$var reg 1 ) D0 $end
+$var reg 1 * clk $end
+$var reg 1 + load $end
+$var reg 8 , load_data [7:0] $end
+$var reg 1 - prev_D0 $end
+$var reg 8 . prev_Q [7:0] $end
+$var reg 1 / prev_load $end
+$var reg 1 0 prev_shift $end
+$var reg 1 1 resetn $end
+$var reg 1 2 shift $end
+$scope module dut $end
+$var wire 1 ) D0 $end
+$var wire 1 * clk $end
+$var wire 1 + load $end
+$var wire 8 3 load_data [7:0] $end
+$var wire 1 1 resetn $end
+$var wire 1 2 shift $end
+$var wire 8 4 Q [7:0] $end
+$var wire 8 5 D [7:0] $end
+$scope begin v[0] $end
+$var parameter 2 6 i $end
+$scope begin genblk1 $end
+$scope module mux_0 $end
+$var wire 1 ) in0 $end
+$var wire 1 7 in1 $end
+$var wire 1 8 out $end
+$var wire 1 + select $end
+$upscope $end
+$upscope $end
+$scope module flip_flop_i $end
+$var wire 1 9 D $end
+$var wire 1 * clk $end
+$var wire 1 : enable $end
+$var wire 1 1 resetn $end
+$var reg 1 ; Q $end
+$upscope $end
+$upscope $end
+$scope begin v[1] $end
+$var parameter 2 < i $end
+$scope begin genblk1 $end
+$scope module mux_i $end
+$var wire 1 = in0 $end
+$var wire 1 > in1 $end
+$var wire 1 ? out $end
+$var wire 1 + select $end
+$upscope $end
+$upscope $end
+$scope module flip_flop_i $end
+$var wire 1 @ D $end
+$var wire 1 * clk $end
+$var wire 1 A enable $end
+$var wire 1 1 resetn $end
+$var reg 1 B Q $end
+$upscope $end
+$upscope $end
+$scope begin v[2] $end
+$var parameter 3 C i $end
+$scope begin genblk1 $end
+$scope module mux_i $end
+$var wire 1 D in0 $end
+$var wire 1 E in1 $end
+$var wire 1 F out $end
+$var wire 1 + select $end
+$upscope $end
+$upscope $end
+$scope module flip_flop_i $end
+$var wire 1 G D $end
+$var wire 1 * clk $end
+$var wire 1 H enable $end
+$var wire 1 1 resetn $end
+$var reg 1 I Q $end
+$upscope $end
+$upscope $end
+$scope begin v[3] $end
+$var parameter 3 J i $end
+$scope begin genblk1 $end
+$scope module mux_i $end
+$var wire 1 K in0 $end
+$var wire 1 L in1 $end
+$var wire 1 M out $end
+$var wire 1 + select $end
+$upscope $end
+$upscope $end
+$scope module flip_flop_i $end
+$var wire 1 N D $end
+$var wire 1 * clk $end
+$var wire 1 O enable $end
+$var wire 1 1 resetn $end
+$var reg 1 P Q $end
+$upscope $end
+$upscope $end
+$scope begin v[4] $end
+$var parameter 4 Q i $end
+$scope begin genblk1 $end
+$scope module mux_i $end
+$var wire 1 R in0 $end
+$var wire 1 S in1 $end
+$var wire 1 T out $end
+$var wire 1 + select $end
+$upscope $end
+$upscope $end
+$scope module flip_flop_i $end
+$var wire 1 U D $end
+$var wire 1 * clk $end
+$var wire 1 V enable $end
+$var wire 1 1 resetn $end
+$var reg 1 W Q $end
+$upscope $end
+$upscope $end
+$scope begin v[5] $end
+$var parameter 4 X i $end
+$scope begin genblk1 $end
+$scope module mux_i $end
+$var wire 1 Y in0 $end
+$var wire 1 Z in1 $end
+$var wire 1 [ out $end
+$var wire 1 + select $end
+$upscope $end
+$upscope $end
+$scope module flip_flop_i $end
+$var wire 1 \ D $end
+$var wire 1 * clk $end
+$var wire 1 ] enable $end
+$var wire 1 1 resetn $end
+$var reg 1 ^ Q $end
+$upscope $end
+$upscope $end
+$scope begin v[6] $end
+$var parameter 4 _ i $end
+$scope begin genblk1 $end
+$scope module mux_i $end
+$var wire 1 ` in0 $end
+$var wire 1 a in1 $end
+$var wire 1 b out $end
+$var wire 1 + select $end
+$upscope $end
+$upscope $end
+$scope module flip_flop_i $end
+$var wire 1 c D $end
+$var wire 1 * clk $end
+$var wire 1 d enable $end
+$var wire 1 1 resetn $end
+$var reg 1 e Q $end
+$upscope $end
+$upscope $end
+$scope begin v[7] $end
+$var parameter 4 f i $end
+$scope begin genblk1 $end
+$scope module mux_i $end
+$var wire 1 g in0 $end
+$var wire 1 h in1 $end
+$var wire 1 i out $end
+$var wire 1 + select $end
+$upscope $end
+$upscope $end
+$scope module flip_flop_i $end
+$var wire 1 j D $end
+$var wire 1 * clk $end
+$var wire 1 k enable $end
+$var wire 1 1 resetn $end
+$var reg 1 l Q $end
+$upscope $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b111 f
+b110 _
+b101 X
+b100 Q
+b11 J
+b10 C
+b1 <
+b0 6
+b100100011011010110110011000100111011001100110011001101101101 (
+b11001 '
+b100100011011010110110011000001101101 &
+b10010000100100011011010110110011000100111011001100110011000101101101 %
+b10010000100100011011010110110011000100111011001100110011011001101101 $
+b1100100 #
+b100100011011010110110011000100111011001100110011010001101101 "
+$end
+#0
+$dumpvars
+0l
+0k
+0j
+0i
+0h
+0g
+0e
+0d
+0c
+0b
+0a
+0`
+0^
+0]
+0\
+0[
+0Z
+0Y
+0W
+0V
+0U
+0T
+0S
+0R
+0P
+0O
+0N
+0M
+0L
+0K
+0I
+0H
+0G
+0F
+0E
+0D
+0B
+0A
+0@
+0?
+0>
+0=
+0;
+0:
+09
+08
+07
+b0 5
+b0 4
+b0 3
+02
+01
+00
+0/
+b0 .
+0-
+b0 ,
+0+
+0*
+0)
+b0 !
+$end
+#250
+11
+#500
+1/
+19
+1@
+1N
+1\
+1c
+1j
+18
+1?
+1M
+1[
+1b
+b11101011 5
+1i
+1:
+1A
+1H
+1O
+1V
+1]
+1d
+1k
+17
+1>
+1L
+1Z
+1a
+1h
+1+
+b11101011 ,
+b11101011 3
+1*
+#1000
+0*
+#1500
+b11101011 .
+0/
+1G
+1U
+1F
+1T
+1=
+1D
+1R
+1`
+1g
+1;
+1B
+1P
+1^
+1e
+b11101011 !
+b11101011 4
+1l
+09
+1@
+0N
+0\
+1c
+1j
+08
+1?
+0M
+0[
+1b
+b11010110 5
+1i
+0:
+0A
+0H
+0O
+0V
+0]
+0d
+0k
+0+
+1*
+#2000
+0*
+#2500
+1-
+10
+19
+b11010111 5
+18
+1:
+1A
+1H
+1O
+1V
+1]
+1d
+1k
+1)
+12
+1*
+#3000
+0*
+#3500
+b11010111 .
+1N
+0U
+1\
+0c
+1M
+0T
+1[
+0b
+1K
+0R
+1Y
+0`
+0-
+1I
+0P
+1W
+b11010111 !
+b11010111 4
+0^
+09
+b10101110 5
+08
+0)
+1*
+#4000
+0*
+#4500
+b10101110 .
+00
+0j
+1c
+0\
+1U
+0@
+0i
+1b
+0[
+1T
+b1011100 5
+0?
+0g
+1`
+0Y
+1R
+0=
+0e
+1^
+0W
+1P
+b10101110 !
+b10101110 4
+0;
+0:
+0A
+0H
+0O
+0V
+0]
+0d
+0k
+02
+1*
+#5000
+1/
+0G
+19
+0F
+b1011001 5
+18
+1:
+1A
+1H
+1O
+1V
+1]
+1d
+1k
+0>
+1S
+0Z
+0h
+1+
+b1011001 ,
+b1011001 3
+0*
+#5500
+b1011001 .
+0/
+1@
+1\
+1j
+1?
+1[
+1i
+1=
+0D
+0K
+1Y
+0`
+1g
+1;
+0B
+0I
+1W
+0^
+1e
+b1011001 !
+b1011001 4
+0l
+0G
+09
+0F
+0N
+1U
+0c
+08
+0M
+1T
+b10110010 5
+0b
+0:
+0A
+0H
+0O
+0V
+0]
+0d
+0k
+0+
+1*
+#6000
+0*
+#6500
+10
+1:
+1A
+1H
+1O
+1V
+1]
+1d
+1k
+12
+1*
+#7000
+0*
+#7500
+b10110010 .
+0@
+1G
+0U
+1c
+0j
+0?
+1F
+0T
+1b
+0i
+0=
+1D
+0R
+1`
+0g
+1-
+0;
+1B
+0P
+1^
+0e
+b10110010 !
+b10110010 4
+1l
+19
+b1100101 5
+18
+1)
+1*
+#8000
+0*
+#8500
+b1100101 .
+00
+1j
+0\
+1N
+0G
+1@
+1i
+0[
+1M
+0F
+b11001011 5
+1?
+1g
+0Y
+1K
+0D
+1=
+0l
+1e
+0W
+1I
+0B
+b1100101 !
+b1100101 4
+1;
+0:
+0A
+0H
+0O
+0V
+0]
+0d
+0k
+02
+1*
+#9000
+0*
+#9500
+1*
+#10000
+0*
+#10500
+1*
+#11000
+0*
+#11500
+1*
+#12000
+0*
+#12500
+1*
+#13000
+0*
+#13500
+1*
