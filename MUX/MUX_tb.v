@@ -5,7 +5,7 @@ module mux_testbench;
    reg select;
    wire out;
    
-   MUX uut(
+   2_to_1_MUX uut(
       .in0(in0),
       .in1(in1),
       .select(select),

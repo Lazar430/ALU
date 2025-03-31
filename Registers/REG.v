@@ -11,14 +11,13 @@ module REG(
 
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	   // LOAD DATA
-	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	    input	      load, 
+	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	    input [7:0]	      load_data,
 
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	   // SHIFT FUNCTIONALITY
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	    input	      shift,
+	    input [1 : 0]     shift,
 	    input	      D0, 
 
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -39,22 +38,39 @@ module REG(
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	   // Choose between initial value (on LOAD) or arbitrary incoming bit (on SHIFT)
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-           MUX mux_0 (
-                      .in0(D0), 
-                      .in1(load_data[0]), 
-                      .select(load), 
-                      .out(D[0])
-                      );
+
+	   MUX_4_to_1 mux_0(
+			    .in0(Q[0]),
+			    .in1(Q[1]),
+			    .in2(D0),
+			    .in3(load_data[0]),
+			    .select(shift),
+			    .out(D[0])
+			    );
+	 
+	 else if(i == 7)
+	   MUX_4_to_1 mux_7(
+			    .in0(Q[7]),
+			    .in1(D0),
+			    .in2(Q[6]),
+			    .in3(load_data[7]),
+			    .select(shift),
+			    .out(D[7])
+			    );
+	 
+	 
          else
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	   // Choose between initial value (on LOAD) or neighbouring bit (on SHIFT)
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-           MUX mux_i (
-                      .in0(Q[i - 1]), 
-                      .in1(load_data[i]), 
-                      .select(load), 
-                      .out(D[i])
-                      );
+           MUX_4_to_1 mux_i (
+			     .in0(Q[i]),
+			     .in1(Q[i + 1]),
+			     .in2(Q[i - 1]),
+			     .in3(load_data[i]), 
+			     .select(shift), 
+			     .out(D[i])
+			     );
 
 	 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	 // Store bits in memory units
@@ -62,11 +78,11 @@ module REG(
          D_FlipFlop flip_flop_i (
 				 .clk(clk), 
 				 .resetn(resetn), 
-				 .enable(load | shift), 
+				 .enable( shift[0] | shift[1] ), 
 				 .D(D[i]), 
 				 .Q(Q[i])  
 				 );
       end
    endgenerate
 
-endmodule
+endmodule // REG
