@@ -1,5 +1,5 @@
 module XOR (
-		input  in0, in1,
+		input  [7 : 0] in0, in1,
 		output out
 	       );
 

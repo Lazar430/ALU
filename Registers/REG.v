@@ -13,7 +13,7 @@ module REG(
 	   // LOAD DATA
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	    input [7:0]	      load_data,
-
+	    input	      load_D0, 
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	   // SHIFT FUNCTIONALITY
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -75,13 +75,24 @@ module REG(
 	 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	 // Store bits in memory units
 	 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-         D_FlipFlop flip_flop_i (
-				 .clk(clk), 
-				 .resetn(resetn), 
-				 .enable( shift[0] | shift[1] ), 
-				 .D(D[i]), 
-				 .Q(Q[i])  
-				 );
+	 if(i == 0)
+           D_FlipFlop flip_flop_0 (
+				   .clk(clk), 
+				   .resetn(resetn), 
+				   .enable( shift[0] | shift[1] ), 
+				   .D(load_D0 ? D0 : D[i]), 
+				   .Q(Q[i])  
+				   );
+	 
+	 else
+	   D_FlipFlop flip_flop_i (
+				   .clk(clk), 
+				   .resetn(resetn), 
+				   .enable( shift[0] | shift[1] ), 
+				   .D(D[i]), 
+				   .Q(Q[i])  
+				   );
+	 
       end
    endgenerate
 

@@ -10,10 +10,12 @@ module Parallel_Adder(
 		       input	    cin,
 		      
 		      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-		      // OUTPUT: carry out and sum
+		      // OUTPUT: carry out, sum and overflow
 		      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 		       output	    cout,
-		       output [7:0] sum);
+		       output [7:0] sum,
+		       output	    overflow
+		      );
 
    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    // store intermediate carries
@@ -40,5 +42,6 @@ module Parallel_Adder(
       
    endgenerate
    assign cout = cout_aux[7];
+   assign overflow = cout_aux[6] ^ cout_aux[7];
 
 endmodule
