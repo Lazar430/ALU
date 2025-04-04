@@ -44,3 +44,26 @@ module MUX_4_to_1 (
 	   );
 
 endmodule // MUX_4_to_1
+
+module MUX_logic(
+		  input [7:0]  in0, in1, in2,
+		  input [1:0]  select,
+		  output [7:0] out
+		 );
+   
+   generate
+      genvar i;
+      for(i=0; i < 8; i = i + 1) begin: mux
+	 MUX_4_to_1 mux(.in0(in0[i]), 
+			.in1(in1[i]),
+			.in2(in2[i]),
+			.in3(1'bx),
+			.select(select), 
+			.out(out[i])
+			);
+      end
+
+   endgenerate
+
+   
+endmodule // MUX_logic

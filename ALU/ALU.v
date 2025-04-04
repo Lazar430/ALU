@@ -1,8 +1,6 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // FILE: ALU.v
-// PURPOSE: implements a FSM that is able to add, subtract, multiply, divide and perform logical operations between two 8-bit inputs
-// TO DO: initialize Q8
-// TO DO: save sum into A
+// PURPOSE: implements a FSM that is able to add, subtract, multiply, divide and perform logical operations between two 8-bit
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 module ALU(
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -27,16 +25,26 @@ module ALU(
    wire [7 : 0]	Q;
    wire [7 : 0]	M;
 
-   //wire [7 : 0]	A_star;
+   wire [7 : 0]	A_star;
 
-   //wire [7 : 0]	A_AND;
-   //wire [7 : 0]	A_OR;
-   //wire [7 : 0]	A_XOR;
+   wire [7 : 0]	A_AND;
+   wire [7 : 0]	A_OR;
+   wire [7 : 0]	A_XOR;
+
+   reg [1 : 0]	logic_select;
    
    reg [1 : 0]	shift;
 
+   reg		sum_in;
+
    always @(*) begin
-      shift = { c[0] | (c[11] | c[17]), c[0] | c[5] };
+      sum_in = (c[2] | c[3] | c[12] | c[13]);
+      
+      shift = { c[0] | (c[11] | c[17]) | c[16] | sum_in, c[0] | c[5] | c[16] | sum_in};
+      
+      logic_select =  (op == 3'b000) ? (2'b00) :
+		      ((op == 3'b001) ? (2'b01) :
+		       ((op == 3'b010) ? (2'b10) : 2'b11 ));
    end
 
    wire		A_D0;
@@ -56,6 +64,33 @@ module ALU(
 
    wire [17 : 0] c;
 
+   AND and_gate(
+		.in0(X),
+		.in1(Y),
+		.out(A_AND)
+		);
+
+   OR or_gate(
+	      .in0(X),
+	      .in1(Y),
+	      .out(A_OR)
+	      );
+
+   XOR xor_gate(
+		.in0(X),
+		.in1(Y),
+		.out(A_XOR)
+		);
+
+   MUX_logic mux_logic(
+		       .in0(A_AND),
+		       .in1(A_OR),
+		       .in2(A_XOR),
+		       .select(logic_select),
+		       .out(A_star)
+		       );
+   
+
    MUX_4_to_1 A_D0_mux(
 		       .in0(1'bx),
 		       .in1(OVR),
@@ -68,7 +103,7 @@ module ALU(
    REG A_Register(
 		  .clk(clk),
 		  .resetn(resetn),
-		  .load_data({8{1'b0}}),
+		  .load_data( (c[0]) ? {8{1'b0}} : ( c[16] ? A_star : sum )),
 		  .shift(shift),
 		  .load_D0(1'b0),
 		  .D0(A_D0),
@@ -79,7 +114,7 @@ module ALU(
 			  .clk(clk),
 			  .resetn(resetn),
 			  .enable(c[5]),
-			  .D(A[0]),
+			  .D(c[0] ? X[7] : A[0]),
 			  .Q(Q8)
 			  );
 
@@ -127,9 +162,9 @@ module ALU(
 		  );
 
    Parallel_Adder RCA(
-		      .a(A),
+		      .a(c[2] ? Q : A),
 		      .b(M),
-		      .cin(c[15] | c[12] | c[14]),
+		      .cin(c[15] | c[12] | c[4]),
 		      .cout(cout),
 		      .sum(sum),
 		      .overflow(overflow)
@@ -154,7 +189,7 @@ module ALU(
    Counter counter(
 		   .clk(clk),
 		   .resetn(resetn | c[0]),
-		   .count_up(c[5]),
+		   .count_up(c[6]),
 		   .count(count7)
 		   );
    
@@ -171,5 +206,14 @@ module ALU(
 		   .c(c),
 		   .end_signal(END)
 		   );
+
+   reg [7 : 0] OUT_1;
+   reg [7 : 0] OUT_2;
+
+   always @(*) begin
+      OUT_1 = c[7] ? A : OUT_1;
+      OUT_2 = c[8] ? Q : OUT_2;
+   end
    
+   assign OUT = { OUT_1, OUT_2 };
 endmodule // ALU
