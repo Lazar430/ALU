@@ -25,14 +25,14 @@ module Counter(
    T_FlipFlop t1(
 		 .clk(clk),
 		 .resetn(resetn),
-		 .T(c[0]),
+		 .T(count_up & c[0]),
 		 .Q(c[1])
 		 );
 
    T_FlipFlop t2(
 		 .clk(clk),
 		 .resetn(resetn),
-		 .T(c[1] & c[0]),
+		 .T(count_up & c[1] & c[0]),
 		 .Q(c[2])
 		 );
 

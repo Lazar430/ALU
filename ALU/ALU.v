@@ -18,11 +18,29 @@ module ALU(
 	   // OUTPUTS
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	    output [15 : 0] OUT,
-	    output wire	END
-	   );
+	    output wire	   END,
+	    output [7 : 0] Q,
+	    output [7 : 0] A,
+	    output [2:0]  count,
+	    output	  ovr,
+	    output	  q8,
+	    output	  r,
+	    output [7:0]  m,
+	    output [7:0]  sum_out,
+	    output [17:0] control
 
-   wire [7 : 0] A;
-   wire [7 : 0]	Q;
+	   );
+   
+   assign count = count7;
+   assign ovr   = OVR;
+   assign q8    = Q8;
+   assign r     = R;
+   assign m     = M;
+   assign sum_out = sum;
+   assign control = c;
+
+   //wire [7 : 0] A;
+   //wire [7 : 0]	Q;
    wire [7 : 0]	M;
 
    wire [7 : 0]	A_star;
@@ -93,7 +111,7 @@ module ALU(
 
    MUX_4_to_1 A_D0_mux(
 		       .in0(1'bx),
-		       .in1(OVR),
+		       .in1(OVR ^ A[7]),
 		       .in2(Q[7]),
 		       .in3(1'bx),
 		       .select(shift),
@@ -113,13 +131,13 @@ module ALU(
    D_FlipFlop Q8_FlipFlop(
 			  .clk(clk),
 			  .resetn(resetn),
-			  .enable(c[5]),
+			  .enable(c[0] | c[5]),
 			  .D(c[0] ? X[7] : A[0]),
 			  .Q(Q8)
 			  );
 
    MUX_4_to_1 Q_D0_mux(
-		       .in0(1'bx),
+     		       .in0(1'bx),
 		       .in1(Q8),
 		       .in2(1'b0),
 		       .in3(1'bx),
@@ -165,6 +183,7 @@ module ALU(
 		      .a(c[2] ? Q : A),
 		      .b(M),
 		      .cin(c[15] | c[12] | c[4]),
+		      .enable(c[3]),
 		      .cout(cout),
 		      .sum(sum),
 		      .overflow(overflow)

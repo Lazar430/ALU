@@ -8,7 +8,7 @@ module Parallel_Adder(
 		      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 		       input [7:0]  a, b,
 		       input	    cin,
-		      
+		       input	    enable,
 		      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 		      // OUTPUT: carry out, sum and overflow
 		      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -17,10 +17,14 @@ module Parallel_Adder(
 		       output	    overflow
 		      );
 
+   wire [7:0] raw_sum;
+   wire	      raw_cout;
+   wire	      raw_overflow;
+
    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    // store intermediate carries
    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-   wire [7:0]cout_aux;
+   wire [7:0] cout_aux;
    wire [7:0] b_xor; 
 
    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -35,13 +39,18 @@ module Parallel_Adder(
 	 // link FACs together
 	 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
          if(i == 0)
-           FAC f1(.a(a[0]), .b(b_xor[0]), .cin(cin), .cout(cout_aux[0]), .sum(sum[0]));
+           FAC f1(.a(a[0]), .b(b_xor[0]), .cin(cin), .cout(cout_aux[0]), .sum(raw_sum[0]));
          else
-           FAC f2(.a(a[i]), .b(b_xor[i]), .cin(cout_aux[i-1]), .cout(cout_aux[i]), .sum(sum[i]));
+           FAC f2(.a(a[i]), .b(b_xor[i]), .cin(cout_aux[i-1]), .cout(cout_aux[i]), .sum(raw_sum[i]));
       end
       
    endgenerate
-   assign cout = cout_aux[7];
-   assign overflow = cout_aux[6] ^ cout_aux[7];
+   
+   assign raw_cout = cout_aux[7];
+   assign raw_overflow = cout_aux[6] ^ cout_aux[7];
 
+   assign sum      = enable ? raw_sum      : 8'b0;
+   assign cout     = enable ? raw_cout     : 1'b0;
+   assign overflow = enable ? raw_overflow : 1'b0;
+   
 endmodule

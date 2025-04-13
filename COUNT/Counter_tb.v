@@ -1,11 +1,12 @@
 module Counter_tb;
    reg clk, resetn;
+   reg count_up;
    wire [2:0] count;
 
    Counter uut (
 		.clk(clk),
 		.resetn(resetn),
-		.count_up(clk), // Use clock as count_up signal
+		.count_up(count_up), // Use clock as count_up signal
 		.count(count)
 		);
 
@@ -15,13 +16,31 @@ module Counter_tb;
    initial begin
       // Initialize signals
       clk = 0;
+      count_up = 0;    
       resetn = 0;
 
       // Monitor variables
-      $monitor("Time=%0t | resetn=%b | count=%b\t%d", $time, resetn, count, count);
+      $monitor("Time=%0t | resetn=%b | count_up=%b | count=%b\t%d", $time, resetn, count_up, count, count);
 
       #10 resetn = 1; // Release reset
 
-      #200 $finish; // Run long enough to observe counting
+      count_up = 1;
+
+      #50 count_up = 0;
+
+      #50 count_up = 1;
+
+      #100 count_up = 0;
+
+      #200 count_up = 1;
+
+      #200 count_up = 0;
+
+      #200 count_up = 1;
+      
+      $finish; // Run long enough to observe counting
    end
+
+
+
 endmodule
