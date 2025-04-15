@@ -38,7 +38,7 @@ module Control_Unit(
    assign c[3] = q1_8 & phi0 & (Q0 ^ R) & (op[2] & ~op[1] & op[0]);                 // Q1Q0R < {001, 010, 101, 110}, la *
    assign c[4] = q1_8 & phi0 & (Q1 & (Q0 ^ R)) & (op[2] & ~op[1] & op[0]);          // Q1Q0R < {101, 110}, la *
    assign c[12] = q1_8 & phi0 & (op[2] & op[1] & ~op[0]);                           // la :
-   assign c[5] = q1_8 & phi1 & (op[2] & ~op[1] & op[0]);                            // la *
+   
    assign c[13] = q1_8 & phi1 & A7 & (op[2] & op[1] & ~op[0]);                      // la :
    assign c[14] = q1_8 & phi1 & ~A7 & (op[2] & op[1] & ~op[0]);                    // la :
    assign c[6] = q1_8 & phi2 & ~count7 ;                                             // la :, *
@@ -48,6 +48,10 @@ module Control_Unit(
    assign c[7] = q9 & phi0;
    assign c[8] = q9 & phi1;
    assign c[9] = q9 & phi1;
+
+   //c[5] (she's not like other signals)
+   //            (         REGULAR RIGHT SHIFT            )   ( FINAL RIGHT SHIFT  )                                 
+   assign c[5] = ( q1_8 & phi1 & (op[2] & ~op[1] & op[0]) ) | ( q9 & phi0 & count7 );                            // la *
 
    always @(posedge clk) begin
       if (!reset)

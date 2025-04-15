@@ -51,14 +51,16 @@ module ALU(
 
    reg [1 : 0]	logic_select;
    
-   reg [1 : 0]	shift;
-
+   reg [1 : 0]	shift_A;
+   reg [1 : 0]	shift_Q;
+   
    reg		sum_in;
 
    always @(*) begin
       sum_in = (c[2] | c[3] | c[12] | c[13]);
       
-      shift = { c[0] | (c[11] | c[17]) | c[16] | sum_in, c[0] | c[5] | c[16] | sum_in};
+      shift_A = { c[0] | (c[11] | c[17]) | c[16] | sum_in, c[0] | c[5] | c[16] | sum_in };
+      shift_Q = { c[0] | (c[11] | c[17]) | c[16], c[0] | c[5] | c[16] };
       
       logic_select =  (op == 3'b000) ? (2'b00) :
 		      ((op == 3'b001) ? (2'b01) :
@@ -114,7 +116,7 @@ module ALU(
 		       .in1(OVR ^ A[7]),
 		       .in2(Q[7]),
 		       .in3(1'bx),
-		       .select(shift),
+		       .select(shift_A),
 		       .out(A_D0)
 		       );
 
@@ -122,7 +124,7 @@ module ALU(
 		  .clk(clk),
 		  .resetn(resetn),
 		  .load_data( (c[0]) ? {8{1'b0}} : ( c[16] ? A_star : sum )),
-		  .shift(shift),
+		  .shift(shift_A),
 		  .load_D0(1'b0),
 		  .D0(A_D0),
 		  .Q(A)
@@ -141,7 +143,7 @@ module ALU(
 		       .in1(Q8),
 		       .in2(1'b0),
 		       .in3(1'bx),
-		       .select(shift),
+		       .select(shift_Q),
 		       .out(Q_D0)
 		       );
 
@@ -163,7 +165,7 @@ module ALU(
 		  .clk(clk),
 		  .resetn(resetn),
 		  .load_data(X),
-		  .shift(shift),
+		  .shift(shift_Q),
 		  .load_D0(load_S),
 		  .D0(load_S ? S : Q_D0),
 		  .Q(Q)
@@ -200,7 +202,7 @@ module ALU(
    D_FlipFlop R_FlipFlop(
 			 .clk(clk),
 			 .resetn(resetn),
-			 .enable(1'b1),
+			 .enable(c[5]),
 			 .D( ( Q[1] & Q[0] ) | ( R & (Q[1] | Q[0]) ) ),
 			 .Q(R)
 			 );
@@ -231,7 +233,7 @@ module ALU(
 
    always @(*) begin
       OUT_1 = c[7] ? A : OUT_1;
-      OUT_2 = c[8] ? Q : OUT_2;
+      OUT_2 = c[8] ? {Q8, Q[7 : 1]} : OUT_2;
    end
    
    assign OUT = { OUT_1, OUT_2 };

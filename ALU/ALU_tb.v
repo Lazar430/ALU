@@ -2,7 +2,7 @@
 
 module ALU_tb;
    reg clk, resetn;
-   reg [7:0] X, Y;
+   reg signed [7:0] X, Y;
    reg [2:0] op;
    reg	     BEGIN;
    
@@ -91,28 +91,20 @@ module ALU_tb;
 
    // Modified $monitor: prints the count change information along with other signals
    initial begin
-      $monitor("Time=%0t | COUNT=%b | OVR=%b | A=%b | Q8=%b | Q=%b | R=%b | M=%b | SUM=%b | C_ACTIVE=%s",
-               $time, count, ovr, A, q8, Q, r, m, sum_out, c_bits_str);
+      $monitor("Time=%0t | COUNT=%b | OVR=%b | A=%b %b | Q8=%b | Q=%b %b | R=%b | M=%b %b | SUM=%b %b | C_ACTIVE=%s",
+               $time, count, ovr, A[7 : 4], A[3 : 0], q8, Q[7 : 4], Q[3 : 0], r, m[7 : 4], m[3 : 0], sum_out[7 : 4], sum_out[3 : 0], c_bits_str);
    end
 
    always @(count) begin
       $display("\n");  
    end
-
-   initial begin
-      @(posedge END);
-      #500;
-      $display("\n\nX = \t%d (%b) \t Y = \t%d (%b) \t | OUT_A = \t%d (%b) \t OUT_B = \t%d (%b)", 
-               X, X, Y, Y, OUT[15:8], OUT[15:8], OUT[7:0], OUT[7:0]);
-      $display("Simulation has ended.");
-      $finish;
-   end
    
    always @(posedge clk) begin
-      if (END) begin
-         $display(">>> END signal activated at T=%0t. Simulation ends.", $time);
-         $finish;
-      end
+      @(posedge END);
+      $display("\033[1;32m\n\nX = \t%d (%b %b) \t Y = \t%d (%b %b) \t | OUT_A = \t%d (%b %b) \t OUT_B = \t%d (%b %b) | OUT = \t%d (%b)\033[0m", 
+               X, X[7:4], X[3:0], Y, Y[7:4], Y[3:0], OUT[15:8], OUT[15:12], OUT[11:8], OUT[7:0], OUT[7:4], OUT[3:0], OUT, OUT);
+      $display("\033[1;31m>>> END signal activated at T=%0t. Simulation ends.\033[0m", $time);
+      $finish;
    end
 
 endmodule
