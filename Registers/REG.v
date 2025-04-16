@@ -79,7 +79,7 @@ module REG(
            D_FlipFlop flip_flop_0 (
 				   .clk(clk), 
 				   .resetn(resetn), 
-				   .enable( shift[0] | shift[1] ), 
+				   .enable( shift[0] | shift[1] | load_D0 ), 
 				   .D(load_D0 ? D0 : D[i]), 
 				   .Q(Q[i])  
 				   );

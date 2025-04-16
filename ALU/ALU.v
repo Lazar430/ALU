@@ -12,6 +12,7 @@ module ALU(
 	   // INPUTS
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	    input [7 : 0]   X, Y,
+            input [7 : 0]   A_divide,
 	    input [2 : 0]   op,
 	    input	    BEGIN,
 	   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -28,7 +29,6 @@ module ALU(
 	    output [7:0]  m,
 	    output [7:0]  sum_out,
 	    output [17:0] control
-
 	   );
    
    assign count = count7;
@@ -59,7 +59,7 @@ module ALU(
    always @(*) begin
       sum_in = (c[2] | c[3] | c[12] | c[13]);
       
-      shift_A = { c[0] | (c[11] | c[17]) | c[16] | sum_in, c[0] | c[5] | c[16] | sum_in };
+      shift_A = { c[0] | (c[11] | c[17]) | c[16] | sum_in | c[10], c[0] | c[5] | c[16] | sum_in | c[10] };
       shift_Q = { c[0] | (c[11] | c[17]) | c[16], c[0] | c[5] | c[16] };
       
       logic_select =  (op == 3'b000) ? (2'b00) :
@@ -70,8 +70,6 @@ module ALU(
    wire		A_D0;
    wire		Q8;
    wire		Q_D0;
-
-   wire		S;
 
    wire [7 : 0]	sum;
    wire		cout;
@@ -123,7 +121,7 @@ module ALU(
    REG A_Register(
 		  .clk(clk),
 		  .resetn(resetn),
-		  .load_data( (c[0]) ? {8{1'b0}} : ( c[16] ? A_star : sum )),
+		  .load_data((c[0]) ? {8{1'b0}} : (c[10] ? A_divide : (c[16] ? A_star : sum))),
 		  .shift(shift_A),
 		  .load_D0(1'b0),
 		  .D0(A_D0),
@@ -147,12 +145,6 @@ module ALU(
 		       .out(Q_D0)
 		       );
 
-   MUX S_mux(
-	     .in0(1'b0),
-	     .in1(1'b1),
-	     .select(A[7]),
-	     .out(S)
-	     );
 
    reg load_S;
 
@@ -167,7 +159,7 @@ module ALU(
 		  .load_data(X),
 		  .shift(shift_Q),
 		  .load_D0(load_S),
-		  .D0(load_S ? S : Q_D0),
+		  .D0(load_S ? ~A[7] : Q_D0),
 		  .Q(Q)
 		  );
 
@@ -185,7 +177,7 @@ module ALU(
 		      .a(c[2] ? Q : A),
 		      .b(M),
 		      .cin(c[15] | c[12] | c[4]),
-		      .enable(c[3]),
+		      .enable(c[2] | c[3] | c[12] | c[13]),
 		      .cout(cout),
 		      .sum(sum),
 		      .overflow(overflow)
@@ -233,7 +225,7 @@ module ALU(
 
    always @(*) begin
       OUT_1 = c[7] ? A : OUT_1;
-      OUT_2 = c[8] ? {Q8, Q[7 : 1]} : OUT_2;
+      OUT_2 = c[8] ? {Q8, Q[7 : 1]} : Q[7:0];
    end
    
    assign OUT = { OUT_1, OUT_2 };

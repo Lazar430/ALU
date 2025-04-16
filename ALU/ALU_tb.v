@@ -2,7 +2,8 @@
 
 module ALU_tb;
    reg clk, resetn;
-   reg signed [7:0] X, Y;
+   reg [7:0] X, Y, A_divide;
+   reg signed [7 : 0] X_signed, Y_signed;
    reg [2:0] op;
    reg	     BEGIN;
    
@@ -23,7 +24,8 @@ module ALU_tb;
 	    .clk(clk), 
 	    .resetn(resetn), 
 	    .X(X), 
-	    .Y(Y), 
+	    .Y(Y),
+     	    .A_divide(A_divide),
 	    .op(op),
 	    .BEGIN(BEGIN),
 	    .OUT(OUT),
@@ -36,15 +38,30 @@ module ALU_tb;
 	    .r(r),
 	    .m(m),
 	    .sum_out(sum_out),
-	    .control(c)
+     	    .control(c)
 	    );
 
    // Clock generation
    always #5 clk = ~clk;
 
+   always @(*) begin
+      X_signed = X;
+      Y_signed = Y;
+   end
+
    initial begin
       $dumpfile("ALU_tb.vcd");
       $dumpvars(0, ALU_tb);
+
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      // 5771 : 135 = 42 R 101
+      A_divide = 8'b00010110;
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      // 7321 : 83 = 88 R 17
+      //A_divide = 8'b00011100;
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -;
 
       clk = 0;
       resetn = 0;
@@ -54,11 +71,35 @@ module ALU_tb;
       #10 BEGIN = 0;
       
       // --- Insert test cases here --- (definitely not AI written)
-      
-      X = 8'b10111001;
-      Y = 8'b10000101; 
 
-      op = 3'b101;
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      // 5771 : 135 = 42 R 101
+      //X = 8'b10001011; //pt :
+      //Y = 8'b10000111; //pt :
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      // 7321 : 83 = 88 R 17
+      //X = 8'b10011001;
+      //Y = 8'b01010011;
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      
+      X = 8'b00010001; //pt celelalte
+      Y = 8'b00000101; //pt celelalte
+
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      // -71 * (-123) = 8733
+      //X = 8'b10111001; //pt *
+      //Y = 8'b10000101; //pt *
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      
+      op = 3'b000; // AND
+      //op = 3'b001; // OR
+      //op = 3'b010; // XOR
+      //op = 3'b011; // ADD
+      //op = 3'b100; // SUB
+      //op = 3'b101; // MUL
+      //op = 3'b110; // DIV
       
       #1000;
       $finish;
@@ -91,20 +132,30 @@ module ALU_tb;
 
    // Modified $monitor: prints the count change information along with other signals
    initial begin
-      $monitor("Time=%0t | COUNT=%b | OVR=%b | A=%b %b | Q8=%b | Q=%b %b | R=%b | M=%b %b | SUM=%b %b | C_ACTIVE=%s",
-               $time, count, ovr, A[7 : 4], A[3 : 0], q8, Q[7 : 4], Q[3 : 0], r, m[7 : 4], m[3 : 0], sum_out[7 : 4], sum_out[3 : 0], c_bits_str);
+      $monitor("Time=%0t | COUNT=%b | OVR=%b | A=%b %b | Q8=%b | Q=%b %b | R=%b |M=%b %b | SUM=%b %b | C_ACTIVE=%s",
+	       $time, count, ovr, A[7 : 4], A[3 : 0], q8, Q[7 : 4], Q[3 : 0], r, m[7 : 4], m[3 : 0], sum_out[7 : 4], sum_out[3 : 0], c_bits_str);
    end
 
    always @(count) begin
-      $display("\n");  
+      $display("\n"); 
    end
-   
+
    always @(posedge clk) begin
       @(posedge END);
-      $display("\033[1;32m\n\nX = \t%d (%b %b) \t Y = \t%d (%b %b) \t | OUT_A = \t%d (%b %b) \t OUT_B = \t%d (%b %b) | OUT = \t%d (%b)\033[0m", 
-               X, X[7:4], X[3:0], Y, Y[7:4], Y[3:0], OUT[15:8], OUT[15:12], OUT[11:8], OUT[7:0], OUT[7:4], OUT[3:0], OUT, OUT);
-      $display("\033[1;31m>>> END signal activated at T=%0t. Simulation ends.\033[0m", $time);
+      
+      if(op == 3'b110) begin       
+	 $display("\n\n\033[1;32m\n\nX = \t%d (%b) \t Y = \t%d (%b %b) \t | REST = \t%d (%b %b) \t QUOTIENT = \t%d (%b %b)\033[0m", 
+		  {A_divide, X}, {A_divide, X}, Y, Y[7:4], Y[3:0], OUT[15:8], OUT[15:12], OUT[11:8], OUT[7:0], OUT[7:4], OUT[3:0]);
+	 $display("\n\n\033[1;31m>>> END signal activated at T=%0t. Simulation ends.\033[0m", $time);
+      end
+
+      else begin 
+	 $display("\n\n\033[1;32m\n\nX = \t%d (%b %b) \t Y = \t%d (%b %b) \t | OUT_A = \t%d (%b %b) \t OUT_B = \t%d (%b %b) | OUT = \t%d (%b)\033[0m", 
+		  X_signed, X[7:4], X[3:0], Y_signed, Y[7:4], Y[3:0], OUT[15:8], OUT[15:12], OUT[11:8], OUT[7:0], OUT[7:4], OUT[3:0], OUT, OUT);
+	 $display("\n\n\033[1;31m>>> END signal activated at T=%0t. Simulation ends.\033[0m", $time);
+      end
+      
       $finish;
    end
 
-endmodule
+endmodule // ALU_tb
