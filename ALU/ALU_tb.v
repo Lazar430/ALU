@@ -118,9 +118,9 @@ module ALU_tb;
             if (c[i]) begin
                $sformat(temp, "c%0d ", i);
                // Append temp to str
-               for (k = 1; k <= 8*5; k = k + 8) begin
-                  str = {str, temp[k +: 8]};
-               end
+               for (k = 8*5; k >= 1; k = k - 8) begin
+		  str = {str, temp[k -: 8]};
+	       end
             end
          end
       end

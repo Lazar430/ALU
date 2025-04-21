@@ -43,7 +43,6 @@ module Control_Unit(
    assign c[14] = q1_8 & phi1 & ~A7 & (op[2] & op[1] & ~op[0]);                    // la :
    assign c[6] = q1_8 & phi2 & ~count7;                                            // la :, *
    assign c[17] = q1_8 & phi3 & (op[2] & op[1] & ~op[0]);                          // la :
-   
 
    //cycle 9
    assign c[7] = q9 & phi0;
@@ -61,6 +60,5 @@ module Control_Unit(
       else
         end_signal <= c[8] | c[9];
    end
-
 
 endmodule // Control_Unit
