@@ -85,7 +85,7 @@ and vice versa, and the \textbf{Control Unit} that takes into consideration the 
 \textbf{counter} for keeping the track of repetitive operations) in order to decide which signal to activate so that it helps with the transition into the next state.
 
 \begin{center}
-\includegraphics[scale=0.3]{Documentation/ALU_1}
+\includegraphics[scale=0.2]{Documentation/ALU1}
 \end{center}
 
 There are three registers used to handle loading, dispatching and alteration of data. The Q and M registers store the two operands required for each operation, and
@@ -136,7 +136,7 @@ The standard hardware implementation of a FAC is provided below.
 \end{center}
 
 \begin{center}
-\includegraphics[scale=0.3]{Documentation/ALU_2}
+\includegraphics[scale=0.3]{Documentation/ALU2}
 \end{center}
 
 The R flag is determined by the formula
@@ -147,7 +147,7 @@ which tells us whether we are in the middle, at the beginning, or at the end of 
 decided by the control unit, in accordance with the steps of the Modifiend Booth algorithm.
 
 \begin{center}
-\includegraphics[scale=0.3]{Documentation/ALU_3}
+\includegraphics[scale=0.3]{Documentation/ALU3}
 \end{center}
 
 The counter is there to make sure we perform 8 steps of the looping parts in the Modified Booth and Restoring Division algorithms, one for each bit
