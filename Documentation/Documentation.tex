@@ -91,8 +91,8 @@ and vice versa, and the \textbf{Control Unit} that takes into consideration the 
 There are three registers used to handle loading, dispatching and alteration of data. The Q and M registers store the two operands required for each operation, and
 in addition to them there's the A register that acts as an accumulator for partial results and also as an extension of the Q register, especially useful
 for the expansion of the bit domain of the first operand, from 8-bit to 16-bit, when performing division. A and Q hold the final results, at the end of the
-operation, and either get concatenated to store the outcome of multiplication, are left separated for simple operation, case in which A stores the output
-value, or represent remainder and quotient respectively, after the end of division. There's and addition D-type flip-flop, Q8, used to expand the bit
+operation, and, depending on user selection, get concatenated to store the outcome of multiplication, are left separated for simple operations, case in which A stores the output
+value, or represent the remainder and the quotient respectively, after the end of division. There's and additional D-type flip-flop, Q8, used to expand the bit
 domain of Q when executing the Modified Booth algorithm.
 The values stored are in two's complement, a storing
 techinque for signed numbers that has the major advantage of preserving corectness of arithmetical operations, regardless of sign. These registers have both
@@ -150,8 +150,8 @@ decided by the control unit, in accordance with the steps of the Modifiend Booth
 \includegraphics[scale=0.3]{Documentation/ALU3}
 \end{center}
 
-The counter is there to make sure we perform 8 steps of the looping parts in the Modified Booth and Restoring Division algorithms, one for each bit
-of the operand. It simply counts from 0 to 7 and then it resets its value to 0. The incrementation happens when its internal \textit{count up} signal
+The counter is there to make sure we perform exactly 8 steps of the looping parts in the Modified Booth and Restoring Division algorithms, one for each bit
+of the operand. It simply counts from 0 to 7 and then it resets its value back to 0. The incrementation happens when its internal \textit{count up} signal
 is activated (concretely, the \textit{count up} signal is sent by the control unit, at the end of each repetitive step). It is implemented using
 T-type flip-flops, that toggle recursively, whenever the previous digits of the counter reach together the maximum value up to that order of
 magnitude.\\
